@@ -9,6 +9,7 @@
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:staged": "npm test -- --findRelatedTests",
     "test:ci": "npm test -- --coverage",
+    "pre-commit": "lint-staged",
     "husky-init": "npx husky install"
   },
   "keywords": [],
