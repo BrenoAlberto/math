@@ -15,6 +15,11 @@ export class AlgebraicExpressionService {
     return expression.replace(/\s/g, '')
   }
 
+  public getNumOfTerms (expression: string): number {
+    const terms = expression.split(/[-+/*]/)
+    return terms.length
+  }
+
   public isNumericExpression (expression: string): boolean {
     const numericRegExp = /^(\d+(\.\d+)?[-+/*^]?)*$/
     return numericRegExp.test(expression)
