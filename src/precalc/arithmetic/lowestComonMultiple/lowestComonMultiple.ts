@@ -9,4 +9,8 @@ export class LowestCommonMultiple implements LowestCommonMultipleInterface {
   public compute (a: number, b: number): number {
     return a * b / this.greatestCommonDivisor.compute(a, b)
   }
+
+  public computeMany (...numbers: number[]): number {
+    return numbers.reduce((acc, number) => acc * number / this.greatestCommonDivisor.compute(acc, number))
+  }
 }
