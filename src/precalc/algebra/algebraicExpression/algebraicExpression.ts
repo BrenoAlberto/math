@@ -1,11 +1,28 @@
-export class AlgebraicExpressionService {
+import { AlgebraicExpressionInterface } from './algebraicExpression.interface'
+import { AlgExpRegex } from './regex'
+
+enum expressionTypes {
+  NUMERIC = 'numeric',
+  VARIABLE = 'variable',
+  MONOMIAL = 'monomial',
+  BINOMIAL = 'binomial',
+  POLYNOMIAL = 'polynomial'
+}
+
+export class AlgebraicExpression implements AlgebraicExpressionInterface {
+  constructor (
+    private readonly algExpRegex: AlgExpRegex
+  ) {}
+
   private readonly operators: string[] = ['+', '-', '*', '/', '^']
 
   public getExpressionType (expression: string): string {
     if (this.isNumericExpression(expression)) {
-      return 'numeric'
+      return expressionTypes.NUMERIC
     } else if (this.isMonomialExpression(expression)) {
-      return 'monomial'
+      return expressionTypes.MONOMIAL
+    } else if (this.isBinomialExpression(expression)) {
+      return expressionTypes.BINOMIAL
     }
 
     return 'unknown'
@@ -34,17 +51,25 @@ export class AlgebraicExpressionService {
     return terms.length
   }
 
-  public isNumericExpression (expression: string): boolean {
+  private isNumericExpression (expression: string): boolean {
     const expWithoutSpaces = this.removeSpaces(expression)
-    const numericRegExp = /^(-)?(\d+(\.\d+)?[-+/*^]?(-)?)*$/
+    const numericRegExp = this.algExpRegex.makeNumericRegex()
     return numericRegExp.test(expWithoutSpaces)
   }
 
-  public isMonomialExpression (expression: string): boolean {
+  private isMonomialExpression (expression: string): boolean {
     const expWithoutSpaces = this.removeSpaces(expression)
     const numOfTerms = this.getNumOfTerms(expWithoutSpaces)
-    if (numOfTerms > 1) return false
-    const monomialExpRegExp = /^(-)?\d?[a-zA-Z]+([\^](-)?\d?[a-zA-Z]?)?$/
+    if (numOfTerms !== 1) return false
+    const monomialExpRegExp = this.algExpRegex.makeMonominalRegex()
     return monomialExpRegExp.test(expWithoutSpaces)
+  }
+
+  private isBinomialExpression (expression: string): boolean {
+    const expWithoutSpaces = this.removeSpaces(expression)
+    const numOfTerms = this.getNumOfTerms(expWithoutSpaces)
+    if (numOfTerms !== 2) return false
+    const binomialExpRegExp = this.algExpRegex.makeBinomialRegex()
+    return binomialExpRegExp.test(expWithoutSpaces)
   }
 }
