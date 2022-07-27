@@ -1,4 +1,5 @@
-type Fraction = [number, number]
+import { Fraction } from '../../../../types'
+import makeFraction from '../makeFraction/makeFraction'
 
 export class FloatToFraction {
   /**
@@ -8,9 +9,9 @@ export class FloatToFraction {
     const [intPart, decimalPart] = this.getIntAndDecimalPart(float)
 
     if (decimalPart < error) {
-      return [intPart, 1]
+      return makeFraction(intPart, 1)
     } else if (1 - error < decimalPart) {
-      return [intPart + 1, 1]
+      return makeFraction(intPart + 1, 1)
     }
 
     let lowerNumerator = 0
@@ -29,7 +30,7 @@ export class FloatToFraction {
         lowerNumerator = middleNumerator
         lowerDenominator = middleDenominator
       } else {
-        return [intPart * middleDenominator + middleNumerator, middleDenominator]
+        return makeFraction(intPart * middleDenominator + middleNumerator, middleDenominator)
       }
     }
   }
